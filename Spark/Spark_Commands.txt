@@ -1,0 +1,35 @@
+
+import org.apache.spark.sql.types.{StructType, StructField, StringType, IntegerType};
+
+val schema = new StructType().add("rowNo",IntegerType,true).add("year",StringType,true).add("month",StringType,true).add("dayOfMonth",StringType,true).add("dayOfWeek",StringType,true).add("depTime",IntegerType,true).add("crsDepTime",IntegerType,true).add("arrTime",IntegerType,true).add("crsArrTime",IntegerType,true).add("unCarrier",StringType,true).add("flightNo",StringType,true).add("tailNo",StringType,true).add("actualElapsedTime",IntegerType,true).add("crsElapsedTime",IntegerType,true).add("airTime",IntegerType,true).add("arrDelay",IntegerType,true).add("depDelay",IntegerType,true).add("origin",StringType,true).add("dest",StringType,true).add("distance",IntegerType,true).add("taxlin",IntegerType,true).add("taxout",IntegerType,true).add("cancelled",StringType,true).add("cancellationCode",StringType,true).add("diverted",StringType,true).add("carrierDelay",IntegerType,true).add("weatherDelay",IntegerType,true).add("nasDelay",IntegerType,true).add("securityDelay",IntegerType,true).add("lateAirCraftDelay",IntegerType,true)
+      
+val df_with_schema = spark.read.format("csv").schema(schema).load("s3://assiairlinedelays/input/DelayedFlights-updated.csv")
+df_with_schema.printSchema()
+
+
+val sqlContext = new org.apache.spark.sql.SQLContext(sc)
+
+df_with_schema.write.saveAsTable("delays")
+
+//Year wise carrier delay from 2003-2010
+val results2=sqlContext.sql("SELECT year,avg((carrierDelay/arrDelay)*100)from delays GROUP BY year")
+spark.time(results2 .show())
+
+//Year wise NAS delay from 2003-2010
+val results3=sqlContext.sql("SELECT year,avg((nasDelay/arrDelay)*100)from delays GROUP BY year")
+spark.time(results3 .show())
+
+//Year wise Weather delay from 2003-2010
+val results4=sqlContext.sql("SELECT year,avg((weatherDelay/arrDelay)*100)from delays GROUP BY year")
+spark.time(results4 .show())
+
+//Year wise late aircraft delay from 2003-2010
+val results5=sqlContext.sql("SELECT year,avg((lateAirCraftDelay/arrDelay)*100)from delays GROUP BY year")
+spark.time(results5 .show())
+
+
+//Year wise security delay from 2003-2010
+val results6=sqlContext.sql("SELECT year,avg((securityDelay/arrDelay)*100)from delays GROUP BY year")
+spark.time(results6 .show())
+
+
