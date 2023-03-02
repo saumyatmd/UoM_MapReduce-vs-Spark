@@ -1,3 +1,6 @@
+/-------Ran all the hive commads using shell and not using any other JARs or programs , please refer the attached document with screen shots for detailed information--/
+
+
 CREATE EXTERNAL TABLE FlightDelays (rowNo INT,year STRING,month STRING,dayOfMonth STRING,dayOfWeek STRING,depTime STRING,crsDepTime STRING,arrTime STRING,crsArrTime STRING,unCarrier STRING,flightNo STRING,tailNo STRING,actualElapsedTime INT,crsElapsedTime INT,airTime INT,arrDelay INT,depDelay INT,origin STRING,dest STRING,distance INT,taxlin INT,taxout INT,cancelled STRING,cancellationCode STRING,diverted STRING,carrierDelay INT,weatherDelay INT,nasDelay INT,securityDelay INT,lateAirCraftDelay INT)ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LOCATION 's3://assiairlinedelays/input' TBLPROPERTIES ("skip.header.line.count"="1");
 
 
